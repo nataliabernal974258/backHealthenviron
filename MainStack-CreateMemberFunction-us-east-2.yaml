@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: This Lambda Function allows you to create a new member in the database.
+Resources:
+  MainStackCreateMemberFunctionuseast2:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.createMemberHandler
+      Runtime: nodejs14.x
+      CodeUri: .
+      Description: This Lambda Function allows you to create a new member in the database.
+      MemorySize: 1024
+      Timeout: 60
+      Role: >-
+        arn:aws:iam::682995381844:role/MainStack-LambdaFunctionExecutionIamRole-us-east-2
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /create-member
+            Method: POST
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0cb6aeee7eb334351
+        SubnetIds:
+          - subnet-0d1f438d95fdb4227
+          - subnet-0e43d65c0b0fbd132
+      Environment:
+        Variables:
+          ALGORITHM: HS256
+          RDS_DB_HOST: >-
+            test-healthenviron-us-east-2.czueib5maf2c.us-east-2.rds.amazonaws.com:3306
+          RDS_DB_NAME: MedtronicHealthEnviron
+          RDS_DB_PASS: '12345678'
+          RDS_DB_USER: admin
+          SECRET: B4RC0D3SC4NN1N6PL4TF0RM
+          TZ: UTC
+      Tags:
+        'lambda:createdBy': SAM
+        Application: barcode-scanning-platform
+        Name: LambdaStack
+      Layers:
+        - >-
+          arn:aws:lambda:us-east-2:682995381844:layer:healthenviron-dependencies:27
